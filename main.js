@@ -102,29 +102,30 @@ async function main() {
     }
   }
 
-  let guids = vectorList.join(',');
-  data = await fetch(`${baseUrl}/v1/images/${fileKey}?ids=${guids}&format=svg`, {headers});
+  data = await fetch(`${baseUrl}/v1/files/${fileKey}/images`, {headers});
   const imageJSON = await data.json();
-
-  const images = imageJSON.images || {};
+  const imagesToSave = {};
+  const images = imageJSON.meta.images || {};
   if (images) {
     let promises = [];
     let guids = [];
     for (const guid in images) {
       if (images[guid] == null) continue;
+      imagesToSave[guid] = {url: images[guid]};
       guids.push(guid);
       promises.push(fetch(images[guid]));
     }
 
     let responses = await Promise.all(promises);
     promises = [];
-    for (const resp of responses) {
-      promises.push(resp.text());
+    for (let i = 0; i < responses.length; i++) {
+      imagesToSave[guids[i]].contentType = responses[i].headers.get("Content-Type");
+      promises.push(responses[i].buffer());
     }
 
     responses = await Promise.all(promises);
     for (let i=0; i<responses.length; i++) {
-      images[guids[i]] = responses[i].replace('<svg ', '<svg preserveAspectRatio="none" ');
+      imagesToSave[guids[i]].body = responses[i];
     }
   }
 
@@ -136,7 +137,7 @@ async function main() {
     const child = canvas.children[i]
     if (child.name.charAt(0) === '#' && child.visible !== false) {
       const child = canvas.children[i];
-      figma.createComponent(child, images, componentMap);
+      figma.createComponent(child, imagesToSave, componentMap);
       nextSection += `export class Master${child.name.replace(/\W+/g, "")} extends PureComponent {\n`;
       nextSection += "  render() {\n";
       nextSection += `    return <div className="master" style={{backgroundColor: "${figma.colorString(child.backgroundColor)}"}}>\n`;
