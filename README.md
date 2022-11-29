@@ -9,7 +9,7 @@ in production. This is simply a proof of concept to show what possibilities exis
 We use 2 endpoints in this project:
 
 - `GET /v1/files/:file_key` - Get the JSON tree from a file. This is the main workhorse of this project and lays the skeleton of the React Components.
-- `GET /v1/images/:file_key` - When we identify nodes that are vectors or other nodes that can't directly be represented by `div`s, we have to render them as svgs.
+- `GET /v1/files/:file_key/images` - Get the URLs and download the images in to the public/img folder.
 
 ## Set up
 
