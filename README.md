@@ -1,4 +1,4 @@
-# Figma to React Converter
+# Figma to react-static Converter
 
 This demonstrates using the Figma REST API to convert a Figma document to React Components.
 Disclaimer: this code is likely incomplete, and may have bugs. It is not intended to be used
