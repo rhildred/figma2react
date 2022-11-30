@@ -23,11 +23,11 @@ By default this project comes with a prerendered component in `src/figmaComponen
 run `npm start`. This will start a React server and a webpage will open to the root page. This webpage will automatically refresh as
 you make changes to the source documents. To follow along with the example component, the source Figma file is located [here](https://www.figma.com/file/VGULlnz44R0Ooe4FZKDxlhh4/Untitled).
 
-When we run the converter, we will convert any *top level frames* in the document to React Components *as long as their name starts with `#`*.
-In the example document you can see that we have one top level frame named `#Clock`. The component resulting from this will be exported in
+When we run the converter, we will convert any *top level frames* in the document to React Components .
+In the example document you can see that we have one top level frame named `Clock`. The component resulting from this will be exported in
 `src/figmaComponents.js` as `MasterClock`, a `React.PureComponent`.
 
-In addition, *any* node with a name starting with a `#` will have a code stub generated for it in `src/components`. These code stubs can be
+In addition, any *top level frames* in the document will have a code stub generated for it in `src/components`. These code stubs can be
 modified to affect the rendering of those components as well as modifying variables within the component (see variables section below).
 
 To run the converter on a file, you will need a personal access token from Figma. Refer to the [Figma API documentation](https://www.figma.com/developers/docs)

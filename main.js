@@ -1,6 +1,7 @@
 require('dotenv').config()
 const fetch = require('node-fetch');
 const fs = require('fs');
+const path = require('path');
 const figma = require('./lib/figma');
 
 const headers = new fetch.Headers();
@@ -26,7 +27,7 @@ const vectorList = [];
 const vectorTypes = ['VECTOR', 'LINE', 'REGULAR_POLYGON', 'ELLIPSE', 'STAR'];
 
 function preprocessTree(node) {
-  let vectorsOnly = node.name.charAt(0) !== '#';
+  let vectorsOnly = node.type !== 'FRAME';
   let vectorVConstraint = null;
   let vectorHConstraint = null;
 
@@ -96,7 +97,7 @@ async function main() {
 
   for (let i=0; i<canvas.children.length; i++) {
     const child = canvas.children[i]
-    if (child.name.charAt(0) === '#'  && child.visible !== false) {
+    if (child.type === 'FRAME'  && child.visible !== false) {
       const child = canvas.children[i];
       preprocessTree(child);
     }
@@ -135,7 +136,7 @@ async function main() {
 
   for (let i=0; i<canvas.children.length; i++) {
     const child = canvas.children[i]
-    if (child.name.charAt(0) === '#' && child.visible !== false) {
+    if (child.type === 'FRAME' && child.visible !== false) {
       const child = canvas.children[i];
       figma.createComponent(child, imagesToSave, componentMap);
       nextSection += `export class Master${child.name.replace(/\W+/g, "")} extends PureComponent {\n`;
@@ -171,10 +172,14 @@ async function main() {
   contents += "  return null;\n}\n\n";
   contents += nextSection;
 
-  const path = "./src/figmaComponents.js";
-  fs.writeFile(path, contents, function(err) {
+  const sPath = "./src/figmaComponents.js";
+  const sFolder = path.dirname(sPath);
+  if(!fs.existsSync(sFolder)){
+    fs.mkdirSync(sFolder, { recursive: true });
+  }
+  fs.writeFile(sPath, contents, function(err) {
     if (err) console.log(err);
-    console.log(`wrote ${path}`);
+    console.log(`wrote ${sPath}`);
   });
 }
 
