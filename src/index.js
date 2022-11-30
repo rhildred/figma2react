@@ -2,9 +2,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import { MasterHome } from './figmaComponents';
+import { MasterAbout } from './figmaComponents';
 import registerServiceWorker from './registerServiceWorker';
 
-ReactDOM.render(<MasterHome />, document.body);
+ReactDOM.render(<MasterAbout />, document.body);
 registerServiceWorker();
         
