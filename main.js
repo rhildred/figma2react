@@ -93,6 +93,7 @@ async function main() {
 
   const doc = data.document;
   const canvas = doc.children[0];
+  const startNode = canvas.prototypeStartNodeID;
   let html = '';
 
   for (let i=0; i<canvas.children.length; i++) {
@@ -146,6 +147,18 @@ async function main() {
       nextSection += "    </div>\n";
       nextSection += "  }\n";
       nextSection += "}\n\n";
+      if(child.id == startNode){
+        fs.writeFileSync("src/index.js", `
+import React from 'react';
+import ReactDOM from 'react-dom';
+import './index.css';
+import { Master${child.name.replace(/\W+/g, "")} } from './figmaComponents';
+import registerServiceWorker from './registerServiceWorker';
+
+ReactDOM.render(<Master${child.name.replace(/\W+/g, "")} />, document.body);
+registerServiceWorker();
+        `);
+      }
     }
   }
 

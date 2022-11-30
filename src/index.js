@@ -1,8 +1,10 @@
+
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import { MasterGallery } from './figmaComponents';
+import { MasterHome } from './figmaComponents';
 import registerServiceWorker from './registerServiceWorker';
 
-ReactDOM.render(<MasterGallery />, document.body);
+ReactDOM.render(<MasterHome />, document.body);
 registerServiceWorker();
+        
